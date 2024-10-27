@@ -36,9 +36,17 @@ generated_invoices/
 *.swo
 .DS_Store
 
-# Google API credentials
+# Google API credentials and sensitive files
+.env
+service-account.json
 credentials.json
 token.json
+
+# Testing
+test_*.py
+
+# Project specific
+config.py  # If it contains sensitive information
 
 # Logs
 *.log
