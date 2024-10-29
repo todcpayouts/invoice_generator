@@ -1,7 +1,8 @@
 import pandas as pd
 from utils.sheets_helper import GoogleSheetsHelper
 from utils.invoice_processor import InvoiceProcessor
-from utils.pdf_generator import PDFInvoiceGenerator
+from utils.invoice_processor import InvoiceProcessor
+from utils.pdf_generator import ModernPDFGenerator
 import os
 import shutil
 import logging
@@ -40,28 +41,16 @@ def generate_invoices():
         processor = InvoiceProcessor(df)
         invoice_data = processor.process_invoices()
         
-        # Generate PDFs
-        print("\nGenerating PDF invoices...")
-        pdf_generator = PDFInvoiceGenerator(output_dir=OUTPUT_DIR)
+        pdf_generator = ModernPDFGenerator(output_dir='generated_invoices')
         
-        # Generate PDFs for all owners
-        generated_files = pdf_generator.generate_pdfs_for_all_owners(invoice_data)
-        
-        # Print summary with progress
-        total_owners = len(invoice_data['bill_owners'])
-        print(f"\nGenerating PDFs for {total_owners} bill owners:")
-        
-        # Print detailed summary
-        print(f"\nGenerated {len(generated_files)} PDF invoices:")
-        print("-" * 60)
-        print(f"{'Bill Owner':<30} {'Period':<15} {'Amount':>15}")
-        print("-" * 60)
-        
-        for owner in invoice_data['bill_owners']:
-            print(f"{owner['name'][:30]:<30} {owner['period']:<15} ${owner['financials']['final_net_payout']:>14,.2f}")
-        
-        print("-" * 60)
-        print(f"\nPDF invoices have been generated in: {OUTPUT_DIR}/")
+        generated_files = []
+        for owner_data in invoice_data['bill_owners']:
+            try:
+                filepath = pdf_generator.generate_pdf(owner_data)
+                generated_files.append(filepath)
+            except Exception as e:
+                print(f"Error generating PDF for {owner_data['name']}: {str(e)}")
+                continue
         
         return generated_files
         
