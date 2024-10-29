@@ -99,7 +99,7 @@ class PDFInvoiceGenerator:
     def format_currency(self, amount, include_space=True):
         """Format amount as currency with optional space after $"""
         if amount == 0:
-            return "$ -"
+            return "$ 0.00" if include_space else "$0.00"
         formatted = f"$ {abs(amount):,.2f}" if include_space else f"${abs(amount):,.2f}"
         return f"-{formatted}" if amount < 0 else formatted
 
@@ -263,7 +263,7 @@ class PDFInvoiceGenerator:
             if not has_platforms:
                 row = [
                     self.wrap_text(restaurant_name),
-                    '-', '-', '$ -', '$ -', '$ -', '$ -', '$ -', '$ -'
+                     '-', '-', '$ 0.00', '$ 0.00', '$ 0.00', '$ 0.00', '$ 0.00', '$ 0.00'
                 ]
                 table_data.append(row)
 

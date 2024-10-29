@@ -6,11 +6,46 @@ from typing import Dict, List
 class InvoiceProcessor:
     def __init__(self, df: pd.DataFrame):
         self.df = df
+        self.clean_monetary_columns()
 
     def clean_column_names(self):
+        """Clean whitespace from column names."""
         self.df.columns = self.df.columns.str.strip()
 
+    def clean_currency(self, x) -> float:
+        """Convert currency string to float."""
+        if pd.isna(x):
+            return 0.0
+        if isinstance(x, str):
+            return float(x.replace('$', '').replace(',', '') or 0)
+        return float(x or 0)
+
+    def clean_monetary_columns(self):
+        """Clean all monetary columns in the dataframe."""
+        monetary_columns = [
+            'Additional Fees',
+            'Sum of Total payout',
+            'Final Net Payout with Agg Fee',
+            'Sum of Sales (excl. tax)',
+            'Sum of Passed on Tax',
+            'Sum of Marketplace Facilitator Tax',
+            'Sum of Marketplace fee',
+            'Sum of Promotions on items',
+            'Refund',
+            'delivery fee',
+            'Other 3P fee',
+            'adjustment',
+            'store_payment',
+            'tips',
+            'ad_fee'
+        ]
+        
+        for column in monetary_columns:
+            if column in self.df.columns:
+                self.df[column] = self.df[column].apply(self.clean_currency)
+
     def process_invoices(self) -> Dict:
+        """Process invoice data and return structured dictionary."""
         self.clean_column_names()
         
         # First level grouping by BillOwnerName and Order Week
@@ -24,6 +59,7 @@ class InvoiceProcessor:
             total_payout = owner_data['Sum of Total payout'].sum()
             final_net_payout = owner_data['Final Net Payout with Agg Fee'].sum()
             ad_fees = owner_data['ad_fee'].sum()
+            aggregator_fee = owner_data['Additional Fees'].max()
             
             # Group by Restaurant and Platform for breakdown
             restaurant_breakdown = []
@@ -57,8 +93,8 @@ class InvoiceProcessor:
                 'financials': {
                     'total_payout': float(total_payout),
                     'final_net_payout': float(final_net_payout),
-                    'ad_fees': float(ad_fees),
-                    'aggregator_fee': 0.0
+                    'ad_fees': 0,
+                    'aggregator_fee': float(aggregator_fee)
                 }
             }
             bill_owners.append(owner_data)
