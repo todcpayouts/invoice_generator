@@ -1,0 +1,54 @@
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+*.log
+.pytest_cache
+.coverage
+htmlcov/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Version Control
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+node_modules/
+temp_invoices/
+generated_invoices/*
+!generated_invoices/.gitkeep
+
+# Documentation
+README.md
+CHANGELOG.md
+docs/
+
+# Docker
+Dockerfile*
+docker-compose*
+.docker/
+
+# Local development
+local_settings.py
+*.sqlite3
+*.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak

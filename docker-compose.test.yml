@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  test:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ./service-account.json:/app/service-account.json
+      - ./credentials.json:/app/credentials.json
+      - ./generated_invoices:/app/generated_invoices
+    environment:
+      - PYTHONPATH=/app
+      - PORT=8000
+      - DEBUG=1
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/service-account.json
+    command: >
+      sh -c "pip install pytest pytest-cov &&
+             pytest tests/ -v --cov=utils --cov-report=term-missing"

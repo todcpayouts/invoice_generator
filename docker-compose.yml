@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  invoice-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      # Your existing volumes
+      - ./service-account.json:/app/service-account.json
+      - ./credentials.json:/app/credentials.json
+      - ./generated_invoices:/app/generated_invoices
+      # Add source code mounting for hot-reload
+      - .:/app
+    environment:
+      - PORT=8000
+      - DEBUG=1
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/service-account.json
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # Add command for hot-reload during development
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    # Improve container restart behavior
+    restart: unless-stopped
