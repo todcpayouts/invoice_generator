@@ -22,7 +22,7 @@
 
         /* Header Styles */
         .header {
-            margin-bottom: 32px;
+            margin-bottom: 40px;
         }
 
         .logo-container {
@@ -37,12 +37,47 @@
         }
 
 
+        .title-container {
+        margin-bottom: 24px;
+        }
+
         .title {
             color: #065F46;
             font-size: 28px;
             font-weight: bold;
+            margin-bottom: 8px;  /* Reduced margin to accommodate owner name */
+            font-family: Helvetica-Bold, Arial-Bold, sans-serif;
+        }
+
+        .owner-name {
+            color: #065F46;
+            font-size: 22px;
+            font-weight: bold;
             margin-bottom: 16px;
             font-family: Helvetica-Bold, Arial-Bold, sans-serif;
+            padding: 4px 0;
+        }
+
+        /* Adjusted payment card spacing */
+        .payment-card {
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 28px;  /* Increased padding */
+            background-color: #ffffff;
+            width: 400px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);  /* Subtle shadow */
+        }
+
+        .payment-row {
+            width: 100%;
+            display: table;
+            margin-bottom: 16px;  /* Increased spacing between rows */
+        }
+
+        .payment-total {
+            border-top: 2px solid #E5E7EB;  /* Slightly thicker border */
+            margin-top: 16px;  /* Increased margin */
+            padding-top: 16px;  /* Increased padding */
         }
 
         .location {
@@ -181,7 +216,10 @@
     </div>
     {% endif %}
     <div class="header">
-        <h1 class="title">Detailed Payout Summary</h1>
+        <div class="title-container">
+            <h1 class="title">Detailed Payout Summary</h1>
+            <div class="owner-name">{{ data.name }}</div>
+        </div>
         <div class="location">{{ data.location }}</div>
         
         <div class="welcome-box">
@@ -199,10 +237,6 @@
             <div class="payment-row">
                 <span class="payment-label">Grand Total</span>
                 <span class="payment-value">${{ "%.2f"|format(data.financials.total_payout) }}</span>
-            </div>
-            <div class="payment-row">
-                <span class="payment-label">Ad Fees</span>
-                <span class="payment-value negative">-${{ "%.2f"|format(data.financials.ad_fees|abs) }}</span>
             </div>
             <div class="payment-row">
                 <span class="payment-label">Aggregator Fee</span>

@@ -1,8 +1,32 @@
-jinja2==3.1.2
-reportlab==4.0.8
-python-dateutil==2.8.2
-pydantic==2.5.2
-google-api-python-client==2.108.0
-google-auth-httplib2==0.1.1
-google-auth-oauthlib==1.1.0
-pandas==2.1.3
+# Web Framework
+fastapi==0.115.0
+uvicorn==0.31.0
+python-multipart==0.0.12
+
+# Data Processing
+pandas==2.2.0
+numpy==1.26.4
+
+# PDF Generation
+pdfkit==1.0.0
+Jinja2==3.1.2
+
+# Google Sheets Integration
+google-auth==2.35.0
+google-auth-oauthlib==1.2.1
+google-api-python-client==2.148.0
+
+# Utilities
+python-dotenv==0.21.0
+pydantic==2.5.3            # Updated version
+pydantic-settings==2.0.3   # Added for config management
+typing-extensions==4.11.0  # Updated version
+
+# File Handling
+openpyxl==3.1.2
+
+# Production Server
+gunicorn==20.1.0
+
+# Text Processing
+rapidfuzz==3.4.0

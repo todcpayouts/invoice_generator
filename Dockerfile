@@ -10,8 +10,7 @@ ENV SPREADSHEET_ID=1niDCOegC7SKkqYjCDhKkia3Oc6D-5bvUIHKDnNMG8YE
 ENV SERVICE_ACCOUNT=70295468269-compute@developer.gserviceaccount.com
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/service-account.json
 
-
-# Install system dependencies
+# Install system dependencies and fonts
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \
@@ -24,8 +23,9 @@ RUN apt-get update && \
     libfontconfig1 \
     wkhtmltopdf \
     curl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    fonts-roboto && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -33,6 +33,10 @@ WORKDIR /app
 # Copy requirements and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy fonts (updated path)
+COPY fonts /app/fonts
+RUN fc-cache -f -v
 
 # Copy application files
 COPY . .
